@@ -25,4 +25,18 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer findByEmail(String email) {
                return customerRepository.findByEmail(email);
     }
+
+  @Override
+  public boolean checkLogin(String email, String password) {
+    Customer customer = customerRepository.findByEmail(email);
+    if (customer != null) {
+      if (password.equals(customer.getPassword()) && customer.isStatus()== true) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+
 }

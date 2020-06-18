@@ -8,4 +8,6 @@ public interface CustomerService {
     void update(Customer customer);
 
     Customer findByEmail(String email);
+
+    boolean checkLogin(String email, String password);
 }

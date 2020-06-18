@@ -1,6 +1,7 @@
 package com.myweb.sportthanhbinh.controller;
 
 import com.myweb.sportthanhbinh.entity.Customer;
+import com.myweb.sportthanhbinh.service.AdminService;
 import com.myweb.sportthanhbinh.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,8 @@ public class LoginAndRegisterController {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping(value = "/login")
     public String login(@ModelAttribute("alert")String alert, @ModelAttribute("message")String message, Model model) {
@@ -60,23 +63,18 @@ public class LoginAndRegisterController {
     @PostMapping(value = "authentic_login")
     public String login(Model model, HttpSession session, @RequestParam("email") String email, @RequestParam("password") String pass,RedirectAttributes ra) {
         Customer customer = customerService.findByEmail(email);
-        if (customer != null) {
-            if (pass.equals(customer.getPassword())) {
-                customer.setPassword("1111");
-                session.setAttribute("customer", customer);
-                return "redirect:/home-page";
-            } else {
-                ra.addAttribute("alert", "alert alert-danger");
-                ra.addAttribute("message", "Login fail");
-                return "redirect:/login";
-            }
-
-        } else {
-            ra.addAttribute("alert", "alert alert-danger");
-            ra.addAttribute("message", "Login fail");
-            return "redirect:/login";
+        if(customerService.checkLogin(email,pass)){
+            customer.setPassword(null);
+            session.setAttribute("customer", customer);
+            return "redirect:/home-page";
+        }else if(adminService.checkLogin(email,pass)){
+            customer.setPassword(null);
+            session.setAttribute("customer", customer);
+            return "redirect:/admin/home";
         }
-
+        ra.addAttribute("alert", "alert alert-danger");
+        ra.addAttribute("message", "Login fail");
+        return "redirect:/login";
     }
 
 }

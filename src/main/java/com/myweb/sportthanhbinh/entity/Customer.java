@@ -21,7 +21,7 @@ public class Customer {
 
     private String Email;
 
-    private boolean status;
+    private boolean status = true;
 
     public int getCustomerId() {
         return CustomerId;
