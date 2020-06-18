@@ -1,5 +1,6 @@
 package com.myweb.sportthanhbinh.controller;
 
+import com.myweb.sportthanhbinh.entity.Admin;
 import com.myweb.sportthanhbinh.entity.Customer;
 import com.myweb.sportthanhbinh.service.AdminService;
 import com.myweb.sportthanhbinh.service.CustomerService;
@@ -63,13 +64,14 @@ public class LoginAndRegisterController {
     @PostMapping(value = "authentic_login")
     public String login(Model model, HttpSession session, @RequestParam("email") String email, @RequestParam("password") String pass,RedirectAttributes ra) {
         Customer customer = customerService.findByEmail(email);
+        Admin admin = adminService.findByEmail(email);
         if(customerService.checkLogin(email,pass)){
             customer.setPassword(null);
             session.setAttribute("customer", customer);
             return "redirect:/home-page";
         }else if(adminService.checkLogin(email,pass)){
-            customer.setPassword(null);
-            session.setAttribute("customer", customer);
+            admin.setPassword(null);
+            session.setAttribute("admin", admin);
             return "redirect:/admin/home";
         }
         ra.addAttribute("alert", "alert alert-danger");
