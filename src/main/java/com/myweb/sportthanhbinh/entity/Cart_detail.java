@@ -13,7 +13,7 @@ public class Cart_detail implements Serializable {
     private Cart idCart;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id_Product", referencedColumnName = "id")
     @Id
     private Product idProduct;
 
