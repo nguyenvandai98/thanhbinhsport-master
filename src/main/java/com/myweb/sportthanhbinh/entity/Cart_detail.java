@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "cart_detail")
+@IdClass(Cart_detail.class)
 public class Cart_detail implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

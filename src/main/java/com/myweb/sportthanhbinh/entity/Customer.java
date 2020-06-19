@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int CustomerId;
+    private Long CustomerId;
 
     private String Name;
 
@@ -23,11 +23,11 @@ public class Customer {
 
     private boolean status = true;
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return CustomerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         CustomerId = customerId;
     }
 

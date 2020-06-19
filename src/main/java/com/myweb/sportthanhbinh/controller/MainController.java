@@ -1,17 +1,23 @@
 package com.myweb.sportthanhbinh.controller;
 
+import com.myweb.sportthanhbinh.entity.Cart_detail;
 import com.myweb.sportthanhbinh.entity.Category;
+import com.myweb.sportthanhbinh.entity.Customer;
 import com.myweb.sportthanhbinh.entity.Product;
+import com.myweb.sportthanhbinh.repository.CartDetailRepository;
+import com.myweb.sportthanhbinh.repository.CartRepository;
 import com.myweb.sportthanhbinh.repository.ProductReponsitory;
 import com.myweb.sportthanhbinh.service.CategoryService;
 import com.myweb.sportthanhbinh.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +31,12 @@ public class MainController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CartDetailRepository cartDetailRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @GetMapping(value = "/admin/home")
     public String index() {
@@ -61,6 +73,32 @@ public class MainController {
 
     @RequestMapping("/cartView")
     public String cartView() {
+        return "web/cart";
+    }
+
+    @RequestMapping("/addToCart/{idProduct}")
+    public String addToCart(@PathVariable(name = "idProduct") Long idProduct, HttpSession session, Model model) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "web/login";
+        }
+        model.addAttribute("customer", customer);
+        List<Cart_detail> cart_details = cartDetailRepository.findByCustomer(customer.getCustomerId());
+        for (Cart_detail cart_detail : cart_details) {
+            if (cart_detail.getIdProduct().getId() == idProduct) {
+                cart_detail.setQuantity(cart_detail.getQuantity() + 1);
+                cartDetailRepository.save(cart_detail);
+                model.addAttribute("cart_details", cartDetailRepository.findByCustomer(customer.getCustomerId()));
+                return "web/cart";
+            }
+        }
+        Cart_detail cart_detail = new Cart_detail();
+        cart_detail.setQuantity(1);
+        cart_detail.setIdCart(cartRepository.findByCustomer(customer.getCustomerId()));
+        cart_detail.setIdProduct(productReponsitory.findById(idProduct).get());
+        cartDetailRepository.save(cart_detail);
+        model.addAttribute("cart_details", cartDetailRepository.findByCustomer(customer.getCustomerId()));
+
         return "web/cart";
     }
 }
