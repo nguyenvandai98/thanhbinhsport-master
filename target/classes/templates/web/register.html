@@ -14,7 +14,7 @@
                 <div class="col-lg-6 col-12">
                     <div class="my__account__wrapper">
                         <h3 class="account__title">Register</h3>
-                        <form action="/register" method="post" th:object="${customer}">
+                        <form action="/register" method="post" th:object="${customer}" id="RegisterForm">
                             <div class="account__form">
                                 <div class="input__box">
                                 <th:block th:if="${message}">
@@ -37,15 +37,15 @@
 
                                 <div class="input__box">
                                     <label>Password<span>*</span></label>
-                                    <input type="text" th:field="*{password}" required>
+                                    <input type="password" th:field="*{password}" required>
                                 </div>
                                 <div class="input__box">
                                     <label>Confirm Password<span>*</span></label>
-                                    <input type="text" id="confirmPassword" name="confirmPassword" required>
+                                    <input type="password" id="confirm" name="confirm" required>
                                 </div>
                                 <div class="input__box">
                                     <label>Address<span>*</span></label>
-                                    <textarea type="text" th:field="*{address}" required></textarea>>
+                                    <textarea type="text" th:field="*{address}" required style="width: 1000px"></textarea>>
                                 </div>
 
                                 <div class="form__btn">
