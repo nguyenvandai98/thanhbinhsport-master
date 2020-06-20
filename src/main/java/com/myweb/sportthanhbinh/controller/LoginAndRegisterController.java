@@ -1,8 +1,11 @@
 package com.myweb.sportthanhbinh.controller;
 
 import com.myweb.sportthanhbinh.entity.Admin;
+import com.myweb.sportthanhbinh.entity.Cart;
 import com.myweb.sportthanhbinh.entity.Customer;
+import com.myweb.sportthanhbinh.repository.CartRepository;
 import com.myweb.sportthanhbinh.service.AdminService;
+import com.myweb.sportthanhbinh.service.CartService;
 import com.myweb.sportthanhbinh.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 @Controller
 public class LoginAndRegisterController {
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private CartService  cartService;
 
     @Autowired
     private CustomerService customerService;
@@ -38,11 +46,15 @@ public class LoginAndRegisterController {
 
     @PostMapping(value = "register")
     public String register(Model model, Customer customer, RedirectAttributes ra) {
+        Cart cart = new Cart();
         try {
             if (customerService.findByEmail(customer.getEmail()) == null) {
                 customerService.save(customer);
                 ra.addFlashAttribute("alert", "alert alert-success");
                 ra.addFlashAttribute("message", "Account registration successful");
+
+                cart.setCustomer(customer);
+                cartService.save(cart);
                 return "redirect:/login";
             } else {
                 model.addAttribute("alert", "alert alert-danger");
@@ -66,10 +78,13 @@ public class LoginAndRegisterController {
         Customer customer = customerService.findByEmail(email);
         Admin admin = adminService.findByEmail(email);
         if(customerService.checkLogin(email,pass)){
+            System.out.println("ad");
             customer.setPassword(null);
             session.setAttribute("customer", customer);
+
             return "redirect:/home-page";
         }else if(adminService.checkLogin(email,pass)){
+            System.out.println("cs");
             admin.setPassword(null);
             session.setAttribute("admin", admin);
             return "redirect:/admin/home";

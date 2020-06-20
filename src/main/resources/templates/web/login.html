@@ -14,7 +14,7 @@
                 <div class="col-lg-6 col-12">
                     <div class="my__account__wrapper">
                         <h3 class="account__title">Login</h3>
-                        <form action="/authentic_login" method="post">
+                        <form action="/authentic_login" method="post" id="loginForm">
                             <div class="account__form">
                                 <div class="input__box">
                                     <th:block th:if="${message}">
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="input__box">
                                     <label>Password<span>*</span></label>
-                                    <input type="text" id="password" name="password">
+                                    <input type="password" id="password" name="password">
                                 </div>
                                 <div class="form__btn">
                                     <button type="submit">Login</button>

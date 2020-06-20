@@ -52,7 +52,7 @@ public class ProductController {
 
     @PostMapping("/saveOrUpdate")
     public String saveOrUpdate(ModelMap model, Product product, @RequestParam("file") MultipartFile file )throws IOException {
-        Path path = Paths.get("D:\\java5\\sportthanhbinh\\src\\main\\resources\\static\\image\\clothes/");
+        Path path = Paths.get("C:\\Users\\DELL\\Desktop\\thanhbinhsport-master\\thanhbinhsport-master\\src\\main\\resources\\static\\image\\clothes/");
         try {
             InputStream inputStream = file.getInputStream();
             Files.copy(inputStream,path.resolve(Objects.requireNonNull(file.getOriginalFilename())), StandardCopyOption.REPLACE_EXISTING);

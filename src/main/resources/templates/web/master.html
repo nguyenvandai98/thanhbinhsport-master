@@ -119,6 +119,61 @@
 <script th:src="@{/web/js/bootstrap.min.js}"></script>
 <script th:src="@{/web/js/plugins.js}"></script>
 <script th:src="@{/web/js/active.js}"></script>
+<script type="text/javascript"
+        src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+<script>
+    $.validator.addMethod('phone', function (value, element) {
+    return this.optional(element) || /((09|03|07|08|05)+([0-9]{8})\b)/.test(value);
+}, "Please enter a valid phone number");
 
+$(document).ready(function() {
+    $('#RegisterForm').validate({
+        rules : {
+            name : {
+                required : true,
+                maxLength: 50
+            },
+            email : {
+                required : true,
+                email: true
+            },
+            phone : {
+                required : true,
+                phone: true
+            },
+            password : {
+                required : true,
+                minlength: 8
+            },
+            confirm : {
+                required : true,
+                equalTo:'#password'
+            },
+            address : {
+                required : true,
+                minlength: 8
+            },
+
+        },
+        messages : {
+        }
+    });
+    $('#loginForm').validate({
+        rules : {
+
+            email : {
+                required : true,
+                email: true
+            },
+
+            password : {
+                required : true,
+
+            },
+        },
+        messages : {
+        }
+    });
+});</script>
 </body>
 </html>
